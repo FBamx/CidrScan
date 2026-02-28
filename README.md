@@ -8,6 +8,7 @@ they arrive — no waiting for the whole range to finish.
 - **Async & fast** — concurrent pings via `asyncio`, configurable concurrency
 - **Real-time progress** — live progress bar on stderr while data flows to stdout
 - **Three output formats** — colour table, JSON, CSV
+- **Interactive TUI** — full terminal UI with live results table and stats panel
 - **Scriptable** — exits `0` if any host is alive, `1` if all are dead
 - **Cross-platform** — macOS, Linux, Windows
 
@@ -41,6 +42,7 @@ cidrscan [OPTIONS] CIDR
 | `--alive-only` | `-a` | off | Only show alive hosts |
 | `--out` | `-f` | — | Write results to file instead of stdout |
 | `--no-summary` | | off | Suppress the summary line |
+| `--tui` | `-u` | off | Launch interactive TUI |
 
 ### Examples
 
@@ -75,6 +77,14 @@ if cidrscan 192.168.1.1/32 --no-summary > /dev/null 2>&1; then
     echo "host is up"
 fi
 ```
+
+Launch the interactive TUI:
+
+```bash
+cidrscan 192.168.1.0/24 --tui
+```
+
+TUI key bindings: `s` scan, `e` export CSV, `q` quit.
 
 ### Sample output
 

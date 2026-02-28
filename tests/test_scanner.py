@@ -9,6 +9,7 @@ from cidrscan.scanner import _ping_args, _ping_once, scan_cidr
 
 # ── _ping_args ────────────────────────────────────────────────────────────────
 
+
 def test_ping_args_unix(monkeypatch):
     monkeypatch.setattr("cidrscan.scanner.sys.platform", "linux")
     args = _ping_args("10.0.0.1", timeout=1.0)
@@ -29,6 +30,7 @@ def test_ping_args_timeout_rounds_up(monkeypatch):
 
 
 # ── _ping_once ────────────────────────────────────────────────────────────────
+
 
 def _make_proc(returncode: int) -> MagicMock:
     proc = MagicMock()
@@ -107,8 +109,10 @@ async def test_ping_once_exception():
 
 # ── scan_cidr ─────────────────────────────────────────────────────────────────
 
+
 def _mock_ping(alive_ips: set[str]):
     """Return a _ping_once replacement that marks given IPs as alive."""
+
     async def fake_ping(ip: str, timeout: float) -> ScanResult:
         return ScanResult(
             ip=ip,
@@ -116,6 +120,7 @@ def _mock_ping(alive_ips: set[str]):
             latency_ms=1.0 if ip in alive_ips else None,
             scanned_at=datetime.now(timezone.utc),
         )
+
     return fake_ping
 
 

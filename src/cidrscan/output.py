@@ -37,6 +37,7 @@ def _make_progress(total: int) -> Progress:
 
 # ── table ─────────────────────────────────────────────────────────────────────
 
+
 def render_table(results: list[ScanResult], *, alive_only: bool = False) -> None:
     console = Console()
     table = Table(show_header=True, header_style="bold cyan", box=None, pad_edge=False)
@@ -62,6 +63,7 @@ def render_table(results: list[ScanResult], *, alive_only: bool = False) -> None
 
 # ── json ──────────────────────────────────────────────────────────────────────
 
+
 def render_json(results: list[ScanResult], *, alive_only: bool = False) -> str:
     rows = [
         {
@@ -77,6 +79,7 @@ def render_json(results: list[ScanResult], *, alive_only: bool = False) -> str:
 
 
 # ── csv ───────────────────────────────────────────────────────────────────────
+
 
 def render_csv(results: list[ScanResult], *, alive_only: bool = False) -> str:
     buf = io.StringIO()
@@ -98,6 +101,7 @@ def render_csv(results: list[ScanResult], *, alive_only: bool = False) -> str:
 
 # ── summary ───────────────────────────────────────────────────────────────────
 
+
 def print_summary(results: list[ScanResult]) -> None:
     console = Console(stderr=True)
     total = len(results)
@@ -113,6 +117,7 @@ def print_summary(results: list[ScanResult]) -> None:
 
 
 # ── public API ────────────────────────────────────────────────────────────────
+
 
 def output_results(
     results: list[ScanResult],

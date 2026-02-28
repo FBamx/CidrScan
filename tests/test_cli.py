@@ -31,6 +31,7 @@ def _fake_scan(*ips_alive: tuple[str, bool]):
 
 # ── argument validation ────────────────────────────────────────────────────────
 
+
 def test_invalid_cidr_rejected():
     result = runner.invoke(app, ["not-a-cidr"])
     assert result.exit_code != 0
@@ -45,6 +46,7 @@ def test_valid_cidr_accepted():
 
 
 # ── exit codes ────────────────────────────────────────────────────────────────
+
 
 def test_exit_0_when_any_alive():
     fake = _fake_scan(("192.168.0.1", True))
@@ -64,11 +66,14 @@ def test_exit_1_when_all_dead():
 # Format correctness is covered by test_output.py; here we verify that the CLI
 # passes the right arguments to output_results.
 
+
 def test_json_output_format():
     fake = _fake_scan(("10.0.0.1", True), ("10.0.0.2", False))
-    with patch("cidrscan.cli.scan_cidr", new=fake), \
-         patch("cidrscan.cli.output_results") as mock_out, \
-         patch("cidrscan.cli.print_summary"):
+    with (
+        patch("cidrscan.cli.scan_cidr", new=fake),
+        patch("cidrscan.cli.output_results") as mock_out,
+        patch("cidrscan.cli.print_summary"),
+    ):
         result = runner.invoke(app, ["10.0.0.0/30", "--output", "json"])
     assert result.exit_code == 0
     mock_out.assert_called_once()
@@ -78,9 +83,11 @@ def test_json_output_format():
 
 def test_csv_output_format():
     fake = _fake_scan(("10.0.0.1", True), ("10.0.0.2", False))
-    with patch("cidrscan.cli.scan_cidr", new=fake), \
-         patch("cidrscan.cli.output_results") as mock_out, \
-         patch("cidrscan.cli.print_summary"):
+    with (
+        patch("cidrscan.cli.scan_cidr", new=fake),
+        patch("cidrscan.cli.output_results") as mock_out,
+        patch("cidrscan.cli.print_summary"),
+    ):
         result = runner.invoke(app, ["10.0.0.0/30", "--output", "csv"])
     assert result.exit_code == 0
     _, kwargs = mock_out.call_args
@@ -89,9 +96,11 @@ def test_csv_output_format():
 
 def test_alive_only_flag():
     fake = _fake_scan(("10.0.0.1", True), ("10.0.0.2", False))
-    with patch("cidrscan.cli.scan_cidr", new=fake), \
-         patch("cidrscan.cli.output_results") as mock_out, \
-         patch("cidrscan.cli.print_summary"):
+    with (
+        patch("cidrscan.cli.scan_cidr", new=fake),
+        patch("cidrscan.cli.output_results") as mock_out,
+        patch("cidrscan.cli.print_summary"),
+    ):
         result = runner.invoke(app, ["10.0.0.0/30", "--alive-only"])
     assert result.exit_code == 0
     _, kwargs = mock_out.call_args
@@ -99,6 +108,7 @@ def test_alive_only_flag():
 
 
 # ── options passthrough ────────────────────────────────────────────────────────
+
 
 def test_concurrency_and_timeout_passed_to_scanner():
     captured: dict = {}

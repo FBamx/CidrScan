@@ -78,7 +78,17 @@ def main(
         bool,
         typer.Option("--no-summary", help="Suppress the summary line"),
     ] = False,
+    tui: Annotated[
+        bool,
+        typer.Option("--tui", "-u", help="Launch interactive TUI"),
+    ] = False,
 ) -> None:
+    if tui:
+        from cidrscan.tui import run_tui
+
+        run_tui(cidr=cidr, concurrency=concurrency, timeout=timeout)
+        return
+
     err = _err_console()
 
     network = ipaddress.ip_network(cidr, strict=False)

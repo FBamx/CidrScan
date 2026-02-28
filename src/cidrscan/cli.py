@@ -1,11 +1,17 @@
 import asyncio
 import ipaddress
-import sys
 from typing import Annotated, Optional
 
 import typer
 from rich.console import Console
-from rich.progress import BarColumn, MofNCompleteColumn, Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    TimeElapsedColumn,
+)
 
 from cidrscan.models import ScanResult
 from cidrscan.output import OutputFormat, output_results, print_summary
@@ -39,11 +45,16 @@ def _validate_cidr(value: str) -> str:
 def main(
     cidr: Annotated[
         str,
-        typer.Argument(help="CIDR block to scan, e.g. 192.168.1.0/24", callback=_validate_cidr),
+        typer.Argument(
+            help="CIDR block to scan, e.g. 192.168.1.0/24",
+            callback=_validate_cidr,
+        ),
     ],
     concurrency: Annotated[
         int,
-        typer.Option("--concurrency", "-c", help="Max simultaneous pings", min=1, max=65535),
+        typer.Option(
+            "--concurrency", "-c", help="Max simultaneous pings", min=1, max=65535
+        ),
     ] = 100,
     timeout: Annotated[
         float,
@@ -59,7 +70,9 @@ def main(
     ] = False,
     out_file: Annotated[
         Optional[str],
-        typer.Option("--out", "-f", help="Write results to this file instead of stdout"),
+        typer.Option(
+            "--out", "-f", help="Write results to this file instead of stdout"
+        ),
     ] = None,
     no_summary: Annotated[
         bool,
@@ -92,7 +105,9 @@ def main(
         )
         with progress:
             task = progress.add_task("Scanning…", total=total)
-            async for result in scan_cidr(cidr, concurrency=concurrency, timeout=timeout):
+            async for result in scan_cidr(
+                cidr, concurrency=concurrency, timeout=timeout
+            ):
                 results.append(result)
                 progress.advance(task)
 

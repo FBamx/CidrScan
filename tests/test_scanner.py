@@ -7,7 +7,6 @@ import pytest
 from cidrscan.models import ScanResult
 from cidrscan.scanner import _ping_args, _ping_once, scan_cidr
 
-
 # ── _ping_args ────────────────────────────────────────────────────────────────
 
 def test_ping_args_unix(monkeypatch):
@@ -41,7 +40,10 @@ def _make_proc(returncode: int) -> MagicMock:
 @pytest.mark.asyncio
 async def test_ping_once_alive():
     proc = _make_proc(returncode=0)
-    with patch("cidrscan.scanner.asyncio.create_subprocess_exec", new=AsyncMock(return_value=proc)):
+    with patch(
+        "cidrscan.scanner.asyncio.create_subprocess_exec",
+        new=AsyncMock(return_value=proc),
+    ):
         result = await _ping_once("192.168.1.1", timeout=1.0)
 
     assert result.alive is True
@@ -53,7 +55,10 @@ async def test_ping_once_alive():
 @pytest.mark.asyncio
 async def test_ping_once_dead():
     proc = _make_proc(returncode=1)
-    with patch("cidrscan.scanner.asyncio.create_subprocess_exec", new=AsyncMock(return_value=proc)):
+    with patch(
+        "cidrscan.scanner.asyncio.create_subprocess_exec",
+        new=AsyncMock(return_value=proc),
+    ):
         result = await _ping_once("192.168.1.2", timeout=1.0)
 
     assert result.alive is False
@@ -73,8 +78,14 @@ async def test_ping_once_timeout():
     proc.wait = AsyncMock(return_value=0)
 
     # Simulate TimeoutError from wait_for
-    with patch("cidrscan.scanner.asyncio.create_subprocess_exec", new=AsyncMock(return_value=proc)):
-        with patch("cidrscan.scanner.asyncio.wait_for", side_effect=asyncio.TimeoutError):
+    with patch(
+        "cidrscan.scanner.asyncio.create_subprocess_exec",
+        new=AsyncMock(return_value=proc),
+    ):
+        with patch(
+            "cidrscan.scanner.asyncio.wait_for",
+            side_effect=asyncio.TimeoutError,
+        ):
             result = await _ping_once("10.0.0.1", timeout=0.01)
 
     assert result.alive is False
@@ -151,7 +162,12 @@ async def test_scan_cidr_respects_concurrency():
         peak = max(peak, active)
         await asyncio.sleep(0)
         active -= 1
-        return ScanResult(ip=ip, alive=False, latency_ms=None, scanned_at=datetime.now(timezone.utc))
+        return ScanResult(
+            ip=ip,
+            alive=False,
+            latency_ms=None,
+            scanned_at=datetime.now(timezone.utc),
+        )
 
     with patch("cidrscan.scanner._ping_once", new=counting_ping):
         _ = [r async for r in scan_cidr("10.0.0.0/24", concurrency=10)]

@@ -1,7 +1,5 @@
 from datetime import datetime, timezone
 
-import pytest
-
 from cidrscan.models import ScanResult
 from cidrscan.output import render_csv, render_json, render_table
 

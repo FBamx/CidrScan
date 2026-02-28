@@ -2,11 +2,17 @@ import csv
 import io
 import json
 import sys
-from datetime import datetime
 from typing import Literal
 
 from rich.console import Console
-from rich.progress import BarColumn, MofNCompleteColumn, Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    TimeElapsedColumn,
+)
 from rich.table import Table
 
 from cidrscan.models import ScanResult
@@ -119,7 +125,9 @@ def output_results(
     if fmt == "table":
         if out_file:
             # Redirect rich output to file (plain text, no colour codes)
-            file_console = Console(file=open(out_file, "w"), highlight=False, markup=False)
+            file_console = Console(
+                file=open(out_file, "w"), highlight=False, markup=False
+            )
             table = Table(show_header=True, box=None, pad_edge=False)
             table.add_column("IP Address")
             table.add_column("Status")

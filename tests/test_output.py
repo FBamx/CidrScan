@@ -22,8 +22,10 @@ RESULTS = [
 
 # ── JSON ──────────────────────────────────────────────────────────────────────
 
+
 def test_render_json_all():
     import json
+
     data = json.loads(render_json(RESULTS))
     assert len(data) == 3
     assert data[0]["ip"] == "10.0.0.1"
@@ -33,6 +35,7 @@ def test_render_json_all():
 
 def test_render_json_alive_only():
     import json
+
     data = json.loads(render_json(RESULTS, alive_only=True))
     assert len(data) == 2
     assert all(d["alive"] for d in data)
@@ -40,12 +43,14 @@ def test_render_json_alive_only():
 
 def test_render_json_dead_host_has_null_latency():
     import json
+
     data = json.loads(render_json(RESULTS))
     dead = next(d for d in data if not d["alive"])
     assert dead["latency_ms"] is None
 
 
 # ── CSV ───────────────────────────────────────────────────────────────────────
+
 
 def test_render_csv_header():
     text = render_csv(RESULTS)
@@ -73,6 +78,7 @@ def test_render_csv_empty_latency_for_dead():
 
 
 # ── table (smoke test — just check it doesn't raise) ─────────────────────────
+
 
 def test_render_table_smoke(capsys):
     render_table(RESULTS)  # should not raise

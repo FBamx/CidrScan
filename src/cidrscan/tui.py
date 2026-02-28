@@ -125,12 +125,8 @@ class CidrScanApp(App[None]):
             self.action_start_scan()
 
     @work(exclusive=True)
-    async def _do_scan(
-        self, cidr: str, concurrency: int, timeout: float
-    ) -> None:
-        async for result in scan_cidr(
-            cidr, concurrency=concurrency, timeout=timeout
-        ):
+    async def _do_scan(self, cidr: str, concurrency: int, timeout: float) -> None:
+        async for result in scan_cidr(cidr, concurrency=concurrency, timeout=timeout):
             self.post_message(ResultReceived(result))
         self.post_message(ScanComplete())
 
@@ -162,12 +158,8 @@ class CidrScanApp(App[None]):
             self.notify(f"Invalid CIDR: {cidr}", severity="error")
             return
         try:
-            concurrency = int(
-                self.query_one("#input-concurrency", Input).value
-            )
-            timeout = float(
-                self.query_one("#input-timeout", Input).value
-            )
+            concurrency = int(self.query_one("#input-concurrency", Input).value)
+            timeout = float(self.query_one("#input-timeout", Input).value)
         except ValueError:
             self.notify("Invalid concurrency or timeout", severity="error")
             return

@@ -17,11 +17,19 @@ from cidrscan.models import ScanResult
 from cidrscan.output import OutputFormat, output_results, print_summary
 from cidrscan.scanner import scan_cidr
 
+__version__ = "0.1.0"
+
 app = typer.Typer(
     name="cidrscan",
     help="Ping-scan all IPs in a CIDR block and report which ones are alive.",
     add_completion=False,
 )
+
+
+def _version_callback(value: bool) -> None:
+    if value:
+        typer.echo(f"cidrscan version {__version__}")
+        raise typer.Exit()
 
 
 def _err_console() -> Console:
@@ -82,6 +90,10 @@ def main(
         bool,
         typer.Option("--tui", "-u", help="Launch interactive TUI"),
     ] = False,
+    version: Annotated[
+        Optional[bool],
+        typer.Option("--version", "-v", callback=_version_callback, is_eager=True),
+    ] = None,
 ) -> None:
     if tui:
         from cidrscan.tui import run_tui
